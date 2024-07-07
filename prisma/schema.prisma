@@ -9,11 +9,11 @@ datasource db {
 }
 
 model Rooms {
-  roomId     String     @id
+  roomId     String     @id @map("room_id")
   roomNumber Int        @map("room_number")
   hotelId    String     @map("hotel_id")
   hotels     Hotels     @relation(fields: [hotelId], references: [hotelId])
-  statusId   Int
+  statusId   Int        @map("status_id")
   roomStatus RoomStatus @relation(fields: [statusId], references: [statusId])
 
   reservesRooms ReservesRooms[]
@@ -54,6 +54,9 @@ model Reserves {
   name            String
   email           String
   telephone       String
+  checkIn         DateTime
+  checkOut        DateTime
+  qtyOfGuests     Int
   paymentMethodId Int            @map("payment_method_id")
   paymentMethods  PaymentMethods @relation(fields: [paymentMethodId], references: [id])
 

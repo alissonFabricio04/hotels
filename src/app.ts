@@ -36,8 +36,8 @@ app.get('/hotels', async (req: Request, res: Response) => {
   const hotels = hotelsData.map(h => ({
     hotelId: h.hotelId,
     name: h.name,
-    lat: h.lat.toNumber(),
-    long: h.long.toNumber(),
+    lat: h.lat,
+    long: h.long,
     zip: h.zip,
     address: h.address,
     number: h.number,
@@ -52,7 +52,7 @@ app.get('/hotels', async (req: Request, res: Response) => {
     }))
   }))
 
-  console.log(hotels)
+  console.log(JSON.stringify(hotels, null, 2))
   return res.status(200).json({ hotels })
 })
 

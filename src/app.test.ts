@@ -23,13 +23,11 @@ test('should be able search hotels through destinations', async () => {
       rooms: [
         {
           roomId: '1db7f169-f8d5-4823-b1ee-d70fd383ad73',
-          hotelId: '53db08c8-8a64-4716-8079-4043af363924',
           roomNumber: 123,
           status: 1
         },
         {
           roomId: 'ee851e24-6301-485a-b354-744078906b44',
-          hotelId: '53db08c8-8a64-4716-8079-4043af363924',
           roomNumber: 321,
           status: 2
         }
