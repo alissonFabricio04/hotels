@@ -1,0 +1,71 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Rooms {
+  roomId     String     @id
+  roomNumber Int        @map("room_number")
+  hotelId    String     @map("hotel_id")
+  hotels     Hotels     @relation(fields: [hotelId], references: [hotelId])
+  statusId   Int
+  roomStatus RoomStatus @relation(fields: [statusId], references: [statusId])
+
+  reservesRooms ReservesRooms[]
+}
+
+model Hotels {
+  hotelId    String  @id @map("hotel_id")
+  name       String
+  lat        Float
+  long       Float
+  zip        String
+  address    String
+  number     Int
+  complement String?
+  city       String
+  state      String
+  country    String
+
+  Rooms Rooms[]
+}
+
+model RoomStatus {
+  statusId Int     @id @map("status_id")
+  status   String  @unique
+  Rooms    Rooms[]
+}
+
+model ReservesRooms {
+  id        String   @id
+  reserveId String   @map("reserve_id")
+  reserves  Reserves @relation(fields: [reserveId], references: [reserveId])
+  roomId    String   @map("room_id")
+  room      Rooms    @relation(fields: [roomId], references: [roomId])
+}
+
+model Reserves {
+  reserveId       String         @id @map("reserve_id")
+  name            String
+  email           String
+  telephone       String
+  paymentMethodId Int            @map("payment_method_id")
+  paymentMethods  PaymentMethods @relation(fields: [paymentMethodId], references: [id])
+
+  reservesRooms ReservesRooms[]
+}
+
+model PaymentMethods {
+  id        Int       @id @default(autoincrement()) @map("id")
+  name      String    @map("name")
+  deletedAt DateTime? @map("deleted_at")
+
+  reserves Reserves[]
+
+  @@map("payment_methods")
+}
