@@ -1,4 +1,5 @@
-import { prisma } from './databaseConnection'
+import { databaseConnection } from '../database/DatabaseConnection'
+import Hotel from '../entities/Hotel'
 
 export async function SetupDatabase() {
   await ClearWholeDatabase()
@@ -7,16 +8,16 @@ export async function SetupDatabase() {
 
 export async function PopulateDatabase() {
   try {
-    await prisma.paymentMethods.createMany({ data: paymentMethods })
-    await prisma.hotels.createMany({ data: hotels })
-    await prisma.roomStatus.createMany({ data: roomStatus })
-    await prisma.rooms.createMany({ data: rooms })
-    await prisma.reserves.createMany({ data: reserves })
-    await prisma.reservesRooms.createMany({ data: reservesRooms })
+    await databaseConnection.paymentMethods.createMany({ data: paymentMethods, skipDuplicates: true })
+    await databaseConnection.hotels.createMany({ data: hotels, skipDuplicates: true })
+    await databaseConnection.roomStatus.createMany({ data: roomStatus, skipDuplicates: true })
+    await databaseConnection.rooms.createMany({ data: rooms, skipDuplicates: true })
+    await databaseConnection.reserves.createMany({ data: reserves, skipDuplicates: true })
+    await databaseConnection.reservesRooms.createMany({ data: reservesRooms, skipDuplicates: true })
   } catch (error) {
     console.log((error as Error).message)
   } finally {
-    await prisma.$disconnect()
+    await databaseConnection.$disconnect()
   }
 }
 
@@ -24,17 +25,17 @@ export async function ClearWholeDatabase() {
   try {
     // await prisma.$transaction([
     await Promise.all([
-      prisma.paymentMethods.deleteMany(),
-      prisma.reserves.deleteMany(),
-      prisma.rooms.deleteMany(),
-      prisma.reservesRooms.deleteMany(),
-      prisma.roomStatus.deleteMany(),
-      prisma.hotels.deleteMany()
+      databaseConnection.paymentMethods.deleteMany(),
+      databaseConnection.reserves.deleteMany(),
+      databaseConnection.rooms.deleteMany(),
+      databaseConnection.reservesRooms.deleteMany(),
+      databaseConnection.roomStatus.deleteMany(),
+      databaseConnection.hotels.deleteMany()
     ])
   } catch (error) {
     console.log((error as Error).message)
   } finally {
-    await prisma.$disconnect()
+    await databaseConnection.$disconnect()
   }
 }
 
@@ -49,7 +50,6 @@ type Reserve = {
   reserveId: string
   name: string
   email: string
-  telephone: string
   paymentMethodId: number
   checkIn: string
   checkOut: string
@@ -62,7 +62,7 @@ type ReserveRoom = {
   roomId: string
 }
 
-const hotels = [
+const hotels: Hotel[] = [
   {
     hotelId: '53db08c8-8a64-4716-8079-4043af363924',
     name: 'Hotel 1',
@@ -98,7 +98,6 @@ const reserves: Reserve[] = [
     reserveId: '2442b71d-4daa-461f-be17-baebdf45f612',
     name: 'john.doe@email.com',
     email: 'john.doe@email.com',
-    telephone: '+99 (99) 99999-9999',
     paymentMethodId: 1,
     checkIn: '2024-07-05T12:00:00.000Z',
     checkOut: '2024-07-07T12:00:00.000Z',
