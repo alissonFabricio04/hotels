@@ -15,8 +15,11 @@ model Rooms {
   hotels     Hotels     @relation(fields: [hotelId], references: [hotelId])
   statusId   Int        @map("status_id")
   roomStatus RoomStatus @relation(fields: [statusId], references: [statusId])
+  capacity   Int
 
   reservesRooms ReservesRooms[]
+
+  @@index([capacity])
 }
 
 model Hotels {
