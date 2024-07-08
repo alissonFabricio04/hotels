@@ -1,58 +1,51 @@
-import { Request, Response } from "express"
-import { IDatabaseConnection } from "../database/DatabaseConnection"
+import Hotel from "../entities/Hotel"
+import HotelRepository from "../repositories/HotelsRepository"
 
 export default class HotelService {
-  constructor(private databaseConnection: IDatabaseConnection) { }
+  constructor(private hotelRepository: HotelRepository) { }
 
-  async getHotels(req: Request, res: Response) {
-    const filters = this.getFilters(req.query)
-    const hotelsData = await this.databaseConnection.hotels.findMany({
-      where: filters,
-      include: {
-        Rooms: true
-      }
-    })
-
-    const hotels = hotelsData.map(h => ({
-      hotelId: h.hotelId,
-      name: h.name,
-      lat: h.lat,
-      long: h.long,
-      zip: h.zip,
-      address: h.address,
-      number: h.number,
-      complement: h.complement,
-      city: h.city,
-      state: h.state,
-      country: h.country,
-      rooms: h.Rooms.map(r => ({
-        roomId: r.roomId,
-        roomNumber: r.roomNumber,
-        status: r.statusId
-      }))
-    }))
-
-    return res.status(200).json({ hotels })
+  async getHotels(query: any): Promise<Hotel[]> {
+    const hotels = await this.strategyFilters(query)
+    return hotels
   }
 
-  private getFilters(query: any) {
-    const allPossibleFilters = [
-      {
-        filter: 'destination',
-        search: 'city'
-      }
-    ]
-
-    const filters: { [key: string]: { search: string } } = {}
-    for (let i = 0; i < allPossibleFilters.length; i++) {
-      const filter = query[allPossibleFilters[i].filter]
-      if (filter) {
-        filters[allPossibleFilters[i].search] = {
-          search: filter
-        }
-      }
+  private strategyFilters(filter: any) {
+    if (filter['destination']) {
+      return this.getHotelsByDestination(filter['destination'])
     }
+    else if (filter['period']) {
+      const [checkIn, checkOut] = String(filter['period']).split('_to_')
+      return this.getHotelsByPeriod(checkIn, checkOut)
+    }
+    else if (filter['capacity']) {
+      const capacity = Number(filter['capacity'])
+      return this.getHotelsByRoomCapacity(capacity)
+    }
+    else {
+      return this.getHotelsWithoutFilter()
+    }
+  }
 
-    return filters
+  private async getHotelsByDestination(destination: string) {
+    const hotels = await this.hotelRepository.getHotelsByDestination(destination)
+    return hotels
+  }
+
+  private async getHotelsByPeriod(checkIn: string, checkOut: string) {
+    const hotels = await this.hotelRepository.getHotelsByPeriod(
+      new Date(checkIn),
+      new Date(checkOut)
+    )
+    return hotels
+  }
+
+  private async getHotelsByRoomCapacity(capacity: number) {
+    const hotels = await this.hotelRepository.getHotelsByRoomCapacity(capacity)
+    return hotels
+  }
+
+  private async getHotelsWithoutFilter() {
+    const hotels = await this.hotelRepository.getHotels()
+    return hotels
   }
 }

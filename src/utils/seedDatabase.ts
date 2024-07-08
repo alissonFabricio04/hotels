@@ -1,5 +1,4 @@
 import { databaseConnection } from '../database/DatabaseConnection'
-import Hotel from '../entities/Hotel'
 
 export async function SetupDatabase() {
   await ClearWholeDatabase()
@@ -23,15 +22,12 @@ export async function PopulateDatabase() {
 
 export async function ClearWholeDatabase() {
   try {
-    // await prisma.$transaction([
-    await Promise.all([
-      databaseConnection.paymentMethods.deleteMany(),
-      databaseConnection.reserves.deleteMany(),
-      databaseConnection.rooms.deleteMany(),
-      databaseConnection.reservesRooms.deleteMany(),
-      databaseConnection.roomStatus.deleteMany(),
-      databaseConnection.hotels.deleteMany()
-    ])
+    await databaseConnection.reservesRooms.deleteMany()
+    await databaseConnection.rooms.deleteMany()
+    await databaseConnection.roomStatus.deleteMany()
+    await databaseConnection.reserves.deleteMany()
+    await databaseConnection.paymentMethods.deleteMany()
+    await databaseConnection.hotels.deleteMany()
   } catch (error) {
     console.log((error as Error).message)
   } finally {
@@ -44,6 +40,7 @@ type Room = {
   roomNumber: number
   hotelId: string
   statusId: number
+  capacity: number
 }
 
 type Reserve = {
@@ -62,7 +59,7 @@ type ReserveRoom = {
   roomId: string
 }
 
-const hotels: Hotel[] = [
+const hotels = [
   {
     hotelId: '53db08c8-8a64-4716-8079-4043af363924',
     name: 'Hotel 1',
@@ -74,7 +71,7 @@ const hotels: Hotel[] = [
     complement: null,
     city: 'Pinheiros',
     state: 'São Paulo',
-    country: 'Brasil',
+    country: 'Brasil'
   }
 ]
 
@@ -83,13 +80,15 @@ const rooms: Room[] = [
     roomId: '1db7f169-f8d5-4823-b1ee-d70fd383ad73',
     hotelId: '53db08c8-8a64-4716-8079-4043af363924',
     roomNumber: 123,
-    statusId: 1
+    statusId: 1,
+    capacity: 4
   },
   {
     roomId: 'ee851e24-6301-485a-b354-744078906b44',
     hotelId: '53db08c8-8a64-4716-8079-4043af363924',
     roomNumber: 321,
-    statusId: 2
+    statusId: 2,
+    capacity: 2
   }
 ]
 

@@ -1,3 +1,5 @@
+import Room from "./Room"
+
 type Hotel = {
   hotelId: string
   name: string
@@ -10,6 +12,7 @@ type Hotel = {
   city: string
   state: string
   country: string
+  rooms: Room[]
 }
 
 export default Hotel
