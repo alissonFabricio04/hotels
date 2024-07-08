@@ -36,6 +36,8 @@ model Hotels {
   country    String
 
   Rooms Rooms[]
+
+  @@index([city])
 }
 
 model RoomStatus {
