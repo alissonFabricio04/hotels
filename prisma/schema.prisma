@@ -53,7 +53,6 @@ model Reserves {
   reserveId       String         @id @map("reserve_id")
   name            String
   email           String
-  telephone       String
   checkIn         DateTime
   checkOut        DateTime
   qtyOfGuests     Int
@@ -61,6 +60,8 @@ model Reserves {
   paymentMethods  PaymentMethods @relation(fields: [paymentMethodId], references: [id])
 
   reservesRooms ReservesRooms[]
+
+  @@index([checkIn, checkOut])
 }
 
 model PaymentMethods {
