@@ -1,9 +1,13 @@
 import env from '../config/env'
 
 import express, { Request, Response } from 'express'
-import { ClearWholeDatabase, PopulateDatabase } from '../utils/seedDatabase'
-import HotelController from '../controllers/HotelController'
-import ReserveController from '../controllers/ReserveController'
+import { ClearWholeDatabase, PopulateDatabase } from '../../utils/seedDatabase'
+import CompareHotelsByLocationController from '../controllers/CompareHotelsByLocationController'
+import CompareHotelsByPriceController from '../controllers/CompareHotelsByPriceController'
+import CreateReserveController from '../controllers/CreateReserveController'
+import GetHotelsByCapacityController from '../controllers/GetHotelsByCapacityController'
+import GetHotelsByDestinationController from '../controllers/GetHotelsByDestinationController'
+import GetHotelsByPeriodController from '../controllers/GetHotelsByPeriodController'
 
 const app = express()
 app.use(express.json())
@@ -18,9 +22,14 @@ app.get('/seed-database', async (_, res: Response) => {
   return res.send('seed finished').end()
 })
 
-app.get('/hotels', (req: Request, res: Response) => new HotelController().getHotels(req, res))
-app.post('/create-reserve', (req: Request, res: Response) => new ReserveController().createReserve(req, res))
-app.get('/reserve/:reserveId', (req: Request, res: Response) => new ReserveController().getReserve(req, res))
+app.get('/hotels/compare/location', (req: Request, res: Response) => new CompareHotelsByLocationController().handle(req, res))
+app.get('/hotels/compare/price', (req: Request, res: Response) => new CompareHotelsByPriceController().handle(req, res))
+
+app.get('/hotels/filter/capacity', (req: Request, res: Response) => new GetHotelsByCapacityController().handle(req, res))
+app.get('/hotels/filter/destination', (req: Request, res: Response) => new GetHotelsByDestinationController().handle(req, res))
+app.get('/hotels/filter/period', (req: Request, res: Response) => new GetHotelsByPeriodController().handle(req, res))
+
+app.post('/reserves/create', (req: Request, res: Response) => new CreateReserveController().handle(req, res))
 
 app.listen(env.SELF_PORT, () => {
   console.log(`Server is running on ${env.SELF_PORT}`)
