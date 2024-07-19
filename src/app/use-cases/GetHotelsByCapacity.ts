@@ -22,7 +22,8 @@ type HotelDTO = {
     roomId: string,
     roomNumber: number,
     status: string,
-    capacity: number
+    capacity: number,
+    dailyPrice: number
   }[]
 }
 
@@ -60,7 +61,8 @@ export default class GetHotelsByPeriod {
         roomId: currentRoom.getId().getValue(),
         roomNumber: currentRoom.getRoomNumber().getValue(),
         status: currentRoom.getStatus().getName(),
-        capacity: currentRoom.getCapacity().getValue()
+        capacity: currentRoom.getCapacity().getValue(),
+        dailyPrice: currentRoom.getDailyPrice().getValue()
       })
     }
 

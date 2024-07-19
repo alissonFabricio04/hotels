@@ -20,7 +20,8 @@ type HotelDTO = {
     roomId: string,
     roomNumber: number,
     status: string,
-    capacity: number
+    capacity: number,
+    dailyPrice: number
   }[]
 }
 
@@ -51,7 +52,8 @@ export default class GetHotelsByDestination {
         roomId: r.getId().getValue(),
         roomNumber: r.getRoomNumber().getValue(),
         status: r.getStatus().getName(),
-        capacity: r.getCapacity().getValue()
+        capacity: r.getCapacity().getValue(),
+        dailyPrice: r.getDailyPrice().getValue()
       }))
 
       hotels.push({
