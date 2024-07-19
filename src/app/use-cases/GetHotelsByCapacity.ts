@@ -51,7 +51,9 @@ export default class GetHotelsByPeriod {
       if (hotels.length === 0 || currentRoom.getHotelId().getValue() !== currentHotelId) {
         const hotel = await this.hotelRepository.getById(currentRoom.getHotelId())
         if (!hotel) throw new InternalServerError('Erro ao buscar hotéis')
-        currentHotelIndex = this.nextHotel(currentHotelIndex, currentHotelId, hotels, hotel)
+        currentHotelId = hotel.getId().getValue()
+        this.pushHotel(hotels, hotel)
+        currentHotelIndex++
       }
 
       hotels[currentHotelIndex].rooms.push({
@@ -65,12 +67,6 @@ export default class GetHotelsByPeriod {
     return {
       hotels
     }
-  }
-
-  private nextHotel(currentHotelIndex: number, currentHotelId: string, hotels: HotelDTO[], nextHotel: Hotel) {
-    currentHotelId = nextHotel.getId().getValue()
-    this.pushHotel(hotels, nextHotel)
-    return currentHotelIndex + 1
   }
 
   private pushHotel(hotels: HotelDTO[], hotel: Hotel) {
