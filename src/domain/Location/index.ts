@@ -37,19 +37,26 @@ export default class Location {
   }
 
   calculateDistance(pointA: Location) {
-    const phi1 = this.getLat()
-    const phi2 = pointA.getLat()
-    const deltaPhi = phi2 - phi1
-    const sinOfDeltaPhi = Math.sin(deltaPhi / 2) ** 2
+    const lat1 = this.getLat()
+    const lon1 = this.getLong()
+    const lat2 = pointA.getLat()
+    const lon2 = pointA.getLong()
 
-    const lambda1 = this.getLong()
-    const lambda2 = pointA.getLong()
-    const deltaLambda = lambda2 - lambda1
-    const sinOfDeltaLambda = Math.sin(deltaLambda / 2) ** 2
+    const dLat = this.toRadians(lat2 - lat1)
+    const dLon = this.toRadians(lon2 - lon1)
 
-    const a = sinOfDeltaPhi + Math.cos(phi1) * Math.cos(phi2) * sinOfDeltaLambda
-    const c = 2 * Math.atan2(a ** (1 / 2), (1 - a) ** (1 / 2))
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.toRadians(lat1)) * Math.cos(this.toRadians(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2)
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+
     return this.EARTH_RADIUS_IN_KM * c
+  }
+
+  toRadians(degrees: number) {
+    return degrees * (Math.PI / 180)
   }
 
   getLat() {
