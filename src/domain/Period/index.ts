@@ -25,7 +25,7 @@ export default class Period {
   static parseStrToDate(date: string) {
     const timestamp = Date.parse(date)
 
-    if (isNaN(timestamp) == false) {
+    if (isNaN(timestamp)) {
       throw new UnprocessableEntity('Data com formato inválido')
     }
 
