@@ -5,9 +5,9 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "start": "node dist/api/app.js",
+    "start": "node dist/infra/api/index.js",
     "build": "tsc",
-    "dev": "npx ts-node-dev --respawn src/api/app.ts",
+    "dev": "npx ts-node-dev --respawn src/infra/api/index.ts",
     "test": "npx vitest"
   },
   "keywords": [],
