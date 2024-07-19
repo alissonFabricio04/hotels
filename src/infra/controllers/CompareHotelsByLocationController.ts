@@ -19,7 +19,15 @@ export default class CompareHotelsByLocationController {
 
   async handle(req: Request, res: Response) {
     try {
-      const output = await this.useCase.handle(req.body)
+      const input = {
+        point: {
+          lat: parseFloat(req.query.pointLat as string),
+          long: parseFloat(req.query.pointLong as string),
+        },
+        room01Id: req.query.room01Id as string,
+        room02Id: req.query.room02Id as string
+      }
+      const output = await this.useCase.handle(input)
       return res
         .status(200)
         .json(output)
