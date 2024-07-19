@@ -21,7 +21,7 @@ export default class CompareHotelsByPrice {
     const room02 = await this.roomRepository.getById(UUId.restore(input.room02Id))
     if (!room02) throw new UnprocessableEntity('Quarto não encontrado')
 
-    if (room01.getDailyPrice() < room02.getDailyPrice()) {
+    if (room01.getDailyPrice().getValue() < room02.getDailyPrice().getValue()) {
       return {
         bestChoiseId: room01.getId().getValue()
       }
