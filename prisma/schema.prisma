@@ -16,6 +16,7 @@ model Rooms {
   statusId   Int        @map("status_id")
   roomStatus RoomStatus @relation(fields: [statusId], references: [statusId])
   capacity   Int
+  dailyPrice Decimal    @map("daily_price")
 
   reservesRooms ReservesRooms[]
 
@@ -61,6 +62,7 @@ model Reserves {
   checkIn         DateTime
   checkOut        DateTime
   qtyOfGuests     Int
+  totalPrice      Decimal        @map("total_price")
   paymentMethodId Int            @map("payment_method_id")
   paymentMethods  PaymentMethods @relation(fields: [paymentMethodId], references: [id])
 

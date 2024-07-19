@@ -1,4 +1,4 @@
-import { databaseConnection } from '../database/DatabaseConnection'
+import { databaseConnection } from '../infra/database/DatabaseConnection'
 
 export async function SetupDatabase() {
   await ClearWholeDatabase()
@@ -41,6 +41,7 @@ type Room = {
   hotelId: string
   statusId: number
   capacity: number
+  dailyPrice: number
 }
 
 type Reserve = {
@@ -51,6 +52,7 @@ type Reserve = {
   checkIn: string
   checkOut: string
   qtyOfGuests: number
+  totalPrice: number
 }
 
 type ReserveRoom = {
@@ -81,14 +83,16 @@ const rooms: Room[] = [
     hotelId: '53db08c8-8a64-4716-8079-4043af363924',
     roomNumber: 123,
     statusId: 1,
-    capacity: 4
+    capacity: 4,
+    dailyPrice: 40
   },
   {
     roomId: 'ee851e24-6301-485a-b354-744078906b44',
     hotelId: '53db08c8-8a64-4716-8079-4043af363924',
     roomNumber: 321,
     statusId: 2,
-    capacity: 2
+    capacity: 2,
+    dailyPrice: 20
   }
 ]
 
@@ -100,7 +104,8 @@ const reserves: Reserve[] = [
     paymentMethodId: 1,
     checkIn: '2024-07-05T12:00:00.000Z',
     checkOut: '2024-07-07T12:00:00.000Z',
-    qtyOfGuests: 2
+    qtyOfGuests: 2,
+    totalPrice: 40
   }
 ]
 

@@ -1,6 +1,8 @@
 const HttpStatusMap: { [key: string]: number } = {
+  'NotFound': 404,
   'UnprocessableEntity': 422,
-  'NotFound': 404
+  'InternalServerError': 500,
+  'NotImplemented': 501,
 }
 
 export default function StrategyErrors(error: Error): number {
