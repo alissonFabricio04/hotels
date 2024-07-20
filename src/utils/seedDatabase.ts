@@ -74,6 +74,19 @@ const hotels = [
     city: 'Pinheiros',
     state: 'São Paulo',
     country: 'Brasil'
+  },
+  {
+    hotelId: '63feae35-65c9-44f1-8f20-df97f4c500fa',
+    name: 'Hotel 2',
+    lat: -23.54131598493478,
+    long: -46.766341409515434,
+    zip: '06020-010',
+    address: 'Avenida dos Autonomistas',
+    number: 1400,
+    complement: null,
+    city: 'Osasco',
+    state: 'São Paulo',
+    country: 'Brasil'
   }
 ]
 
@@ -93,6 +106,14 @@ const rooms: Room[] = [
     statusId: 2,
     capacity: 2,
     dailyPrice: 20
+  },
+  {
+    roomId: '0c1c7293-e751-403c-bb31-3e67143a1820',
+    hotelId: '63feae35-65c9-44f1-8f20-df97f4c500fa',
+    roomNumber: 999,
+    statusId: 2,
+    capacity: 4,
+    dailyPrice: 80
   }
 ]
 
